@@ -1,0 +1,6 @@
+@Suchak.API_HostAddress = http://localhost:5172
+
+GET {{Suchak.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
