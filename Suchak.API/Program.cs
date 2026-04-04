@@ -1,4 +1,7 @@
 
+using Microsoft.EntityFrameworkCore;
+using Suchak.Infrastructure.Data;
+
 namespace Suchak.API
 {
     public class Program
@@ -14,6 +17,7 @@ namespace Suchak.API
             builder.Services.AddOpenApi();
 
             var app = builder.Build();
+            builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
