@@ -9,31 +9,34 @@ using System.Threading.Tasks;
 
 namespace Suchak.Infrastructure.Data.Configurations
 {
-    public class TaskProgressConfiguration: IEntityTypeConfiguration<TaskProgress>
-        public void Configure(EntityTypeBuilder<TaskProgress>builder)
-
+    public class TaskProgressConfiguration : IEntityTypeConfiguration<TaskProgress>
     {
-        builder.ToTable("task_progress");
-        builder.HasKey(tp => tp.Id);
-        builder.Property(tp => tp.Id)
-            .HasColumnName("id");
 
-        builder.Property(tp => tp.TaskId)
-            .IsRequired()
-            .HasColumnName("task_id");
-        builder.Property(tp => tp.Date)
-            .IsRequired()
-            .HasColumnName("date");
-        builder.Property(tp => tp.IsCompleted)
-            .HasDefaultValue(false)
-            .HasColumnName("is_completed");
+        public void Configure(EntityTypeBuilder<TaskProgress> builder)
 
-        builder.HasOne(tp => tp.Task)
-            .WithMany(t => t.ProgressRecords)
-            .HasForeignKey(tp => tp.TaskId)
-            .OnDelete(DeleteBehavior.Cascade);
+        {
+            builder.ToTable("task_progress");
+            builder.HasKey(tp => tp.Id);
+            builder.Property(tp => tp.Id)
+                .HasColumnName("id");
+
+            builder.Property(tp => tp.TaskId)
+                .IsRequired()
+                .HasColumnName("task_id");
+            builder.Property(tp => tp.Date)
+                .IsRequired()
+                .HasColumnName("date");
+            builder.Property(tp => tp.IsCompleted)
+                .HasDefaultValue(false)
+                .HasColumnName("is_completed");
+
+            builder.HasOne(tp => tp.Task)
+                .WithMany(t => t.ProgressRecords)
+                .HasForeignKey(tp => tp.TaskId)
+                .OnDelete(DeleteBehavior.Cascade);
 
 
 
+        }
     }
 }
