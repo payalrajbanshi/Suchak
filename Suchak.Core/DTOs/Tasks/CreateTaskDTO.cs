@@ -17,4 +17,4 @@ namespace Suchak.Core.DTOs.Tasks
         public string Priority { get; set; }
     }
 }
-}
+
