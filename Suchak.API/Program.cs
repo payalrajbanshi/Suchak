@@ -7,13 +7,11 @@ using System.Text;
 using Suchak.Core.Interfaces;
 using Suchak.Infrastructure.Services;
 using Suchak.Core.Services;
-namespace Suchak.API
-{
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
+using Suchak.Infrastructure.Repositories;
+using System.Reflection;
+
+
+var builder = WebApplication.CreateBuilder(args);
             var key = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]);
             builder.Services.AddAuthentication(options =>
             {
@@ -40,21 +38,46 @@ namespace Suchak.API
             // Add services to the container.
 
             builder.Services.AddControllers();
-            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-            builder.Services.AddOpenApi();
+           
+          
 
-            var app = builder.Build();
             builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IDashboardService, DashboardService>();
             builder.Services.AddScoped<IThemeService, ThemeService>();
             builder.Services.AddScoped<ITaskService, TaskService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ITaskProgressRepository, TaskProgressRepository>();
+builder.Services.AddScoped<ITaskRepository, TaskRepository>();
+builder.Services.AddScoped<IReminderRepository, ReminderRepository>();
 
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
+builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
+//builder.Services.AddOpenApi();
+WebApplication app;
+try
+{
+     app = builder.Build();
+}
+catch(ReflectionTypeLoadException ex)
+{
+    Console.WriteLine("=== Loader Exceptions ===");
+    foreach(var e in ex.LoaderExceptions)
+    {
+        Console.WriteLine(e.Message);
+
+    }
+    throw;
+}
+
+
+
+if (app.Environment.IsDevelopment())
             {
-                app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
+               // app.MapOpenApi();
             }
 
             app.UseHttpsRedirection();
@@ -65,6 +88,5 @@ namespace Suchak.API
             app.MapControllers();
 
             app.Run();
-        }
-    }
-}
+
+

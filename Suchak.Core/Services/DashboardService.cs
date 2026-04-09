@@ -29,7 +29,7 @@ namespace Suchak.Core.Services
             return new DashboardDTO
             {
                 TotalTasks = tasks.Count,
-                CompletedTasks = tasks.Count(tasks => tasks.IsCompleted),
+                CompletedTasks = tasks.Count(t => t.IsCompleted),
                 PendingTasks = tasks.Count(t => !t.IsCompleted)
             };
 

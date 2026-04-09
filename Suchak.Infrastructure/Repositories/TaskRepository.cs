@@ -34,7 +34,7 @@ namespace Suchak.Infrastructure.Repositories
         {
              _context.TaskItems.Add(item);
         }
-        public void Uodate(TaskItem item)
+        public void Update(TaskItem item)
         {
             _context.TaskItems.Update(item);
         }
