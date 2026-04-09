@@ -10,6 +10,6 @@ namespace Suchak.Core.DTOs.Dashboard
     {
         public string Day { get; set; }
         public int TasksCompleted { get; set; }
-        public int HoursWorked { get; set; }
+        //public int HoursWorked { get; set; }
     }
 }
