@@ -19,7 +19,7 @@ namespace Suchak.API.Controllers
         public async Task<IActionResult> Register(RegisterDTO dto)
         {
             var userId = await _userService.RegisterAsync(dto);
-            return Ok(new { message = "User registerd", userId });
+            return Ok(new { message = "User registered", userId });
         }
         [HttpPost("login")]
         public async Task<IActionResult> Login (LoginDTO dto)

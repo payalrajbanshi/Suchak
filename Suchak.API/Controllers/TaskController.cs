@@ -9,18 +9,18 @@ using System.Threading.Tasks;
 namespace Suchak.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller")]
+    [Route("api/[controller]")]
     [Authorize]
-    public class TaskController: ControllerBase
+    public class TasksController: ControllerBase
     {
         private readonly ITaskService _taskService;
-        public TaskController(ITaskService taskService)
+        public TasksController(ITaskService taskService)
         {
             _taskService = taskService;
         }
         private int GetUserId()
         {
-            var claim = User.FindFirst("id");
+            var claim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
             if (claim == null)
                 throw new System.Exception("Invalid token");
             return int.Parse(claim.Value);
@@ -33,7 +33,7 @@ namespace Suchak.API.Controllers
             var id = await _taskService.CreateTaskAsync(userId, dto);
             return Ok(new { taskId = id });
         }
-        [HttpGet("{userId}")]
+        [HttpGet]
         public async Task<IActionResult> GetTasks()
         {
             var userId = GetUserId();
@@ -41,9 +41,10 @@ namespace Suchak.API.Controllers
             return Ok(tasks);
 
         }
-        [HttpPut]
-        public async Task<IActionResult> Update(UpdateTaskDTO dto)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, UpdateTaskDTO dto)
         {
+            dto.Id = id;
             await _taskService.UpdateTaskAsync(dto);
             return Ok("updated");
         }
@@ -51,9 +52,9 @@ namespace Suchak.API.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             await _taskService.DeleteTaskAsync(id);
-            return Ok("User deleted");
+            return Ok("Task deleted");
         }
-        [HttpPost("reoder")]
+        [HttpPost("reorder")]
         public async Task<IActionResult> Reorder(List<ReoderTaskDTO> dto)
         {
             await _taskService.ReorderTaskAsync(dto);

@@ -12,7 +12,6 @@ namespace Suchak.Core.Entities
         public int TaskId { get; set; }
         public DateTime ReminderTime { get; set; }
         public bool IsSent { get; set; }
-        
         public TaskItem Task { get; set; }
     }
 }

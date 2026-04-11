@@ -28,7 +28,7 @@ namespace Suchak.Infrastructure.Data.Configurations
             builder.Property(u => u.PasswordHash)
                 .IsRequired()
                 .HasMaxLength(255)
-                .HasColumnName("password");
+                .HasColumnName("password_hash");
             builder.Property(u => u.Category)
                 .HasMaxLength(255)
                 .HasColumnName("category");

@@ -23,7 +23,7 @@ namespace Suchak.Infrastructure.Data.Configurations
                 .HasColumnName("title");
             builder.Property(t => t.Description)
                 .HasColumnType("NVARCHAR(MAX)")
-                .HasColumnName("deadline");
+                .HasColumnName("description");
             builder.Property(t => t.Deadline)
                 .IsRequired()
                 .HasColumnName("deadline");
@@ -42,7 +42,7 @@ namespace Suchak.Infrastructure.Data.Configurations
                 .HasColumnName("is_completed");
             builder.Property(t => t.Order)
                 .HasDefaultValue(0)
-                .HasColumnName("oder_number");
+                .HasColumnName("order_number");
             builder.Property(t => t.UserId)
                 .IsRequired()
                 .HasColumnName("user_id");
