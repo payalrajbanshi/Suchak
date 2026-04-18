@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Suchak.Infrastructure.Services
 {
-    public class AuthService: IAuthService
+    public class AuthService : IAuthService
     {
         private readonly IConfiguration _config;
         public AuthService(IConfiguration configuration)
@@ -26,6 +26,7 @@ namespace Suchak.Infrastructure.Services
             var claims = new[]
             {
                 new Claim("id", user.Id.ToString()),
+                new Claim(ClaimTypes.NameIdentifier ,user.Id.ToString()),
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim("name", user.Name)
             };

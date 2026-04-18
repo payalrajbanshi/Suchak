@@ -6,25 +6,26 @@ using Suchak.Core.DTOs.Tasks;
 using Suchak.Core.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Status = Suchak.Core.Entities.TaskStatus;
 namespace Suchak.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
-    public class TasksController: ControllerBase
+    public class TasksController: BaseController
     {
         private readonly ITaskService _taskService;
         public TasksController(ITaskService taskService)
         {
             _taskService = taskService;
         }
-        private int GetUserId()
-        {
-            var claim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
-            if (claim == null)
-                throw new System.Exception("Invalid token");
-            return int.Parse(claim.Value);
-        }
+        //private int GetUserId()
+        //{
+        //    var claim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+        //    if (claim == null)
+        //        throw new System.Exception("Invalid token");
+        //    return int.Parse(claim.Value);
+        //}
         [HttpPost]
         public async Task<IActionResult> Create(CreateTaskDTO dto)
             
@@ -60,7 +61,33 @@ namespace Suchak.API.Controllers
             await _taskService.ReorderTaskAsync(dto);
             return Ok("Reodered");
         }
+        [HttpPost("toggle/{id}")]
+        public async Task<IActionResult> Toggle(int id)
+        {
+            await _taskService.ToggleCompleteAsync(id);
+            return Ok("toggled");
+        }
+        [HttpGet("smart")]
+        public async Task<IActionResult> GetSmartTasks()
+        {
+            var userId = GetUserId();
+            var result = await _taskService.GetSmartSuggestionsAsync(userId);
+            return Ok(result);
+        }
 
+        [HttpGet("balanced")]
+        public async Task<IActionResult> GetBalancedPlan()
+        {
+            var userId = GetUserId();
+            var result = await _taskService.GetBalancedPlansAsync(userId);
+            return Ok(result);
+        }
 
+        [HttpPut("status/{id}")]
+        public async Task<IActionResult> UpdateStatus(int id, [FromBody] Status status)
+        {
+            await _taskService.UpdateStatusAsync(id, status);
+            return Ok();
+        }
     }
 }

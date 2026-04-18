@@ -35,25 +35,24 @@ namespace Suchak.Core.Services
 
             }
 
-        //public Dictionary<string, int> GetWeeklyReport(List<TaskProgress> progress)
-        //{
-        //    return progress
-        //        .GroupBy(p => p.Date.DayOfWeek.ToString())
-        //        .ToDictionary( 
-        //        g => g.Key,
-        //        g => g.Count(p => p.IsCompleted
-        //        ));
-        //}
+     
         
-        public List<WeeklyReportDTO> GetWeeklyReports(List<TaskProgress> progress)
+        public List<WeeklyReportDTO> GetWeeklyReports(List<TaskResponseDTO> tasks)
         {
-            return progress.GroupBy(p => p.Date.DayOfWeek.ToString())
-                .Select(g => new WeeklyReportDTO
-                {
-                    Day = g.Key,
-                    TasksCompleted = g.Count(x => x.IsCompleted)
+            var last7days = Enumerable.Range(0, 7)
+                .Select(i => DateTime.Now.Date.AddDays(-i))
+                .Reverse()
+                .ToList();
+            return last7days.Select(day => new WeeklyReportDTO
+            {
+                Day = day.ToString("ddd"),
+                TasksCompleted=tasks.Count(t=>
+                //t.IsCompleted
+                //&& 
+                t.CreatedAt.Date==day
+                )
+            }).ToList();
 
-                }).ToList();
         }
     }
 }

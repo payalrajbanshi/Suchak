@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using TaskStatus = Suchak.Core.Entities.TaskStatus;
 namespace Suchak.Infrastructure.Data.Configurations
 {
     public class TaskItemConfiguration:IEntityTypeConfiguration<TaskItem>
@@ -34,8 +34,8 @@ namespace Suchak.Infrastructure.Data.Configurations
                 .HasMaxLength(20)
                 .HasColumnName("priority");
             builder.Property(t => t.Status)
-                .HasMaxLength(20)
-                .HasDefaultValue("Pending")
+                
+                .HasDefaultValue(TaskStatus.Todo)
                 .HasColumnName("status");
             builder.Property(t => t.IsCompleted)
                 .HasDefaultValue(false)
@@ -45,10 +45,15 @@ namespace Suchak.Infrastructure.Data.Configurations
                 .HasColumnName("order_number");
             builder.Property(t => t.UserId)
                 .IsRequired()
-                .HasColumnName("user_id");
+                .HasColumnName("user_id")
+                .HasColumnType("int");
             builder.Property(t => t.CreatedAt)
                 .HasDefaultValueSql("GETDATE()")
                 .HasColumnName("created_at");
+            builder.Property(t => t.CompletedHours)
+                .HasDefaultValue(0)
+                .HasColumnName("completed_hours");
+
 
             builder.HasOne(t => t.User)
                 .WithMany(u => u.Tasks)

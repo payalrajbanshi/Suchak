@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Suchak.Core.DTOs;
-
+using TaskStatus = Suchak.Core.Entities.TaskStatus;
 namespace Suchak.Core.Interfaces
 {
     public interface ITaskService
@@ -17,6 +17,11 @@ namespace Suchak.Core.Interfaces
         Task DeleteTaskAsync(int taskId);
         double CalculateDailyWork(int estimatedHours, DateTime deadline);
         List<TaskResponseDTO> GetTodayPlan(List<TaskResponseDTO> tasks);
-        Task ReorderTaskAsync(List<ReoderTaskDTO> tasks);
+        Task ReorderTaskAsync(List<ReoderTaskDTO> dto);
+        Task ToggleCompleteAsync(int taskId);
+        Task<List<SmartSuggestionDTO>> GetSmartSuggestionsAsync(int userId);
+        Task<List<BalancedPlanDTO>> GetBalancedPlansAsync(int userId);
+        Task UpdateStatusAsync(int taskId, TaskStatus status);
+
     }
 }

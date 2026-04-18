@@ -34,7 +34,9 @@ namespace Suchak.Infrastructure.Data.Configurations
                 .WithMany(t => t.ProgressRecords)
                 .HasForeignKey(tp => tp.TaskId)
                 .OnDelete(DeleteBehavior.Cascade);
-
+            builder.Property(tp => tp.HoursWorked)
+                .IsRequired()
+                .HasColumnName("hours_worked");
 
 
         }

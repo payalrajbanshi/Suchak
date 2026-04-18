@@ -28,7 +28,9 @@ namespace Suchak.Infrastructure.Repositories
         }
         public async Task<List<TaskProgress>> GetByUserIdAsync(int userId)
         {
-            return await _context.TaskProgresses.Where(p =>p.Task.UserId == userId)
+            return await _context.TaskProgresses
+                .Where(p => _context.TaskItems
+                    .Any(t => t.Id == p.TaskId && t.UserId == userId))
                 .ToListAsync();
         }
         public async Task<List<TaskProgress>> GetByDateRangeAsync(DateTime start, DateTime end)

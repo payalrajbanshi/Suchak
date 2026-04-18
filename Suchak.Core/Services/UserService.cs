@@ -49,7 +49,7 @@ namespace Suchak.Core.Services
             var user = await _userRepository.GetByEmailAsync(dto.Email);
             if(user==null || !_authService.VerifyPassword(dto.Password,user.PasswordHash))
             {
-                throw new ApplicationException("Invalid exceptions");
+                throw new ApplicationException("Invalid email or password");
             }
             return _authService.GenerateToken(user);
         }

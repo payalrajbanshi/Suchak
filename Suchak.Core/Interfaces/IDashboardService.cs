@@ -15,6 +15,6 @@ namespace Suchak.Core.Interfaces
         //int GetCompletedTask(List<TaskItem> tasks);
         //int GetPendingTask(List<TaskItem> tasks);
         DashboardDTO GetSummary(List<TaskResponseDTO> tasks);
-        List<WeeklyReportDTO> GetWeeklyReports(List<TaskProgress> progress);
+        List<WeeklyReportDTO> GetWeeklyReports(List<TaskResponseDTO> tasks);
     }
 }

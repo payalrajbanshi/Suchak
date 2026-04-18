@@ -44,6 +44,9 @@ namespace Suchak.Infrastructure.Data.Configurations
             builder.Property(u => u.CreatedAt)
                 .HasDefaultValueSql("GETDATE()")
                 .HasColumnName("created_at");
+            builder.Property(U => U.AvailableHoursPerDay)
+                .HasDefaultValue(8)
+                .HasColumnName("available_hours_per_day");
 
             builder.HasMany(u => u.Tasks)
                 .WithOne(t => t.User)

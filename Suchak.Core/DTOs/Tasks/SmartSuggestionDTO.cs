@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Suchak.Core.DTOs.Tasks
 {
-    public class CreateTaskDTO
+    public class SmartSuggestionDTO
     {
+        public int TaskId { get; set; }
         public string Title { get; set; }
-        public string Description { get; set; }
-
+        public double HoursToDoToday { get; set; }
         public DateTime Deadline { get; set; }
-        public int EstimatedHours { get; set; }
-
-        public int Priority { get; set; }
+        public string Warning { get; set; }
     }
 }
-

@@ -13,10 +13,11 @@ namespace Suchak.Core.Entities
         public string Email { get; set; }
         public string PasswordHash { get; set; }
         public string Category { get; set; }
-        public string ThemeMode { get; set; }
-        public string PrimaryColor { get; set; }
-        public string BackgroundImageUrl { get; set; }
+        public string? ThemeMode { get; set; }
+        public string? PrimaryColor { get; set; }
+        public string? BackgroundImageUrl { get; set; }
         public DateTime CreatedAt { get; set; }
+        public double AvailableHoursPerDay { get; set; }
 
         public ICollection<TaskItem> Tasks { get; set; } = new List<TaskItem>();
     }

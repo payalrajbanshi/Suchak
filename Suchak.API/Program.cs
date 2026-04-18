@@ -9,6 +9,7 @@ using Suchak.Infrastructure.Services;
 using Suchak.Core.Services;
 using Suchak.Infrastructure.Repositories;
 using System.Reflection;
+using Microsoft.OpenApi.Models;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -41,7 +42,8 @@ var builder = WebApplication.CreateBuilder(args);
            
           
 
-            builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+                sqlOptions=>sqlOptions.CommandTimeout(60)));
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IDashboardService, DashboardService>();
@@ -53,7 +55,44 @@ builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 builder.Services.AddScoped<IReminderRepository, ReminderRepository>();
 
 builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+// builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Enter: Bearer YOUR_TOKEN"
+    });
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
+});
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.AllowAnyOrigin()
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+    });
+});
 //builder.Services.AddOpenApi();
 WebApplication app;
 try
@@ -81,6 +120,7 @@ if (app.Environment.IsDevelopment())
             }
 
             app.UseHttpsRedirection();
+app.UseCors("AllowFrontend");
             app.UseAuthentication();
             app.UseAuthorization();
 

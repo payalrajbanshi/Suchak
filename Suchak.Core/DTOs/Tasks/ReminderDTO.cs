@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Suchak.Core.DTOs.Tasks
 {
-    internal class ReminderDTO
+    public  class ReminderDTO
     {
+        public int TaskId { get; set; }
+        public DateTime ReminderTime { get; set; }
     }
 }

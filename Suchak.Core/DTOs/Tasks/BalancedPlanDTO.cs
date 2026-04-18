@@ -6,15 +6,12 @@ using System.Threading.Tasks;
 
 namespace Suchak.Core.DTOs.Tasks
 {
-    public class CreateTaskDTO
+    public class BalancedPlanDTO
     {
+        public int TaskId { get; set; }
         public string Title { get; set; }
-        public string Description { get; set; }
-
+        public double HoursToday { get; set; }
+        public double RemainingHours { get; set; }
         public DateTime Deadline { get; set; }
-        public int EstimatedHours { get; set; }
-
-        public int Priority { get; set; }
     }
 }
-

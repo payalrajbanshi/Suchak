@@ -33,14 +33,17 @@ namespace Suchak.Infrastructure.Repositories
         public async Task AddAsync(TaskItem item)
         {
              _context.TaskItems.Add(item);
+          await  _context.SaveChangesAsync();
         }
         public void Update(TaskItem item)
         {
             _context.TaskItems.Update(item);
+            _context.SaveChangesAsync();
         }
         public void Delete(TaskItem item)
         {
             _context.TaskItems.Remove(item);
+            _context.SaveChangesAsync();
         }
 
     }

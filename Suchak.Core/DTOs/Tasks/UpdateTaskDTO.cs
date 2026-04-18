@@ -16,7 +16,8 @@ namespace Suchak.Core.DTOs.Tasks
         public DateTime Deadline { get; set; }
         public int EstimatedHours { get; set; }
 
-        public string Priority { get; set; }
+        public int Priority { get; set; }
         public bool IsCompleted { get; set; }
+        public int Order { get; set; }
     }
 }
