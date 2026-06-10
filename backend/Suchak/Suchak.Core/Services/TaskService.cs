@@ -1,4 +1,5 @@
-﻿using Suchak.Core.DTOs.Tasks;
+﻿using Suchak.Core.BusinessRules;
+using Suchak.Core.DTOs.Tasks;
 using Suchak.Core.Entities;
 using Suchak.Core.Interfaces;
 using System;
@@ -15,10 +16,12 @@ namespace Suchak.Core.Services
     {
         private readonly ITaskRepository _taskRepository;
         private readonly IUserRepository _userRepository;
-        public TaskService(ITaskRepository taskRepository, IUserRepository userRepository)
+        private readonly TaskPlanningCalculator _taskPlanningCalculator;
+        public TaskService(ITaskRepository taskRepository, IUserRepository userRepository, TaskPlanningCalculator taskPlanningCalculator)
         {
             _taskRepository = taskRepository;
             _userRepository = userRepository;
+            _taskPlanningCalculator = taskPlanningCalculator;
         }
         public async Task<long> CreateTaskAsync(int userId, CreateTaskDTO dto)
         {
@@ -79,17 +82,11 @@ namespace Suchak.Core.Services
         }
         public double CalculateDailyWork(int estimatedHours, DateTime deadline)
         {
-            var daysLeft = (deadline.Date - DateTime.Now.Date).Days;
-            if (daysLeft <= 0)
-                return estimatedHours;
-            return Math.Round((double)estimatedHours / daysLeft, 2);
+            return _taskPlanningCalculator.CalculateDailyWork(estimatedHours, deadline);
         }
         public List<TaskResponseDTO> GetTodayPlan(List<TaskResponseDTO> tasks)
         {
-            return tasks
-                .Where(t => !t.IsCompleted)
-                .OrderBy(t => t.Deadline)
-                .ToList();
+            return _taskPlanningCalculator.GetTodayPlan(tasks);
         }
         public async Task ReorderTaskAsync(List<ReoderTaskDTO> dto)
         {
@@ -118,41 +115,12 @@ namespace Suchak.Core.Services
         {
             var tasks = await _taskRepository.GetByUserIdAsync(userId);
             var user = await _userRepository.GetByIdAsync(userId);
-            var today = DateTime.Now.Date;
-            double availableHours = user.AvailableHoursPerDay;
-            var suggestions = new List<SmartSuggestionDTO>();
-            foreach (var t in tasks.Where(t => !t.IsCompleted))
-            {
-                var daysLeft = (t.Deadline.Date - today).Days;
-                daysLeft = Math.Max(daysLeft, 1);
-                
-                double remainingHours = Math.Max(0,t.EstimatedHours - t.CompletedHours);
-
-                double baseHours = remainingHours / daysLeft;
-                double priorityMultiplier = t.Priority switch
-                {
-                    3 => 1.3,
-                    2 => 1.1,
-                    _ => 1.0
-                };
-                
-                double calculated = baseHours * priorityMultiplier;
-                double finalHours = Math.Min(Math.Round(calculated,2),availableHours);
-                string warning = "";
-                if (finalHours > availableHours)
-                {
-                    warning = "Too much work for today";
-                }
-                suggestions.Add(new SmartSuggestionDTO
-                {
-                    TaskId = t.Id,
-                    Title = t.Title,
-                    HoursToDoToday = finalHours,
-                    Deadline = t.Deadline,
-                    Warning = warning
-                });
-            }
-            return suggestions.OrderByDescending(t => t.HoursToDoToday)
+            if (user == null)
+                throw new Exception("user not found");
+            return tasks.
+                Where(t => !t.IsCompleted)
+                .Select(t => _taskPlanningCalculator.GenerateSuggestion(t, user.AvailableHoursPerDay))
+                .OrderByDescending(t => t.HoursToDoToday)
                 .Take(5)
                 .ToList();
         }
