@@ -6,7 +6,7 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import Layout from "../components/Layout";
 import TasksPage from "../features/tasks/pages/TaskPage";
 import ProfilePage from "../features/profile/pages/ProfilePage";
-
+import PlannerHub from "../features/planner/pages/PlannerHub";
 const AppRoutes = () => {
   return (
     <Routes>
@@ -43,6 +43,8 @@ const AppRoutes = () => {
             </ProtectedRoute>
           }
         />
+
+        <Route path="/planner" element={<PlannerHub />} />
       </Route>
     </Routes>
   );

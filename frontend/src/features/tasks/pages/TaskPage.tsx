@@ -8,14 +8,16 @@ import ProductivityChart from "../components/ProductivityChart";
 import {
   getTasks,
   createTask,
-  deleteTask,
   toggleTask,
   getSmart,
   getBalanced,
-  updateStatus,
 } from "../services/taskService";
 
-import type { Task, SmartSuggestion, BalancedPlan } from "../types/taskTypes";
+import type {
+  Task,
+  SmartSuggestion,
+  BalancedPlan,
+} from "../types/taskTypes";
 
 export default function TasksPage() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -48,51 +50,93 @@ export default function TasksPage() {
     loadData();
   };
 
-return (
-  <div className="min-h-screen bg-[#0f172a] text-white p-6">
-    
-    {/* HEADER */}
-    <div className="flex items-center justify-between mb-6 mt-0">
-      <h1 className="text-3xl font-bold">Task Dashboard</h1>
-      <TaskFormModal onCreate={handleCreate} />
-    </div>
+  return (
+    <div className="min-h-screen bg-slate-50 p-8">
 
-    {/* 2x2 GRID */}
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 auto-rows-fr">
+      {/* HEADER */}
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h1 className="text-3xl font-bold text-slate-900">
+            Task Dashboard
+          </h1>
 
-      {/* YOUR TASKS */}
-      <div className="bg-[#1e293b] rounded-2xl p-5 shadow-lg flex flex-col h-full">
-        <h2 className="text-lg font-semibold mb-4">📝 Your Tasks</h2>
-        <div className="flex-1 overflow-y-auto">
-          <TaskChecklist tasks={tasks} onToggle={handleToggle} />
+          <p className="text-slate-500 mt-1">
+            Manage tasks, track progress, and stay productive.
+          </p>
         </div>
+
+        <TaskFormModal onCreate={handleCreate} />
       </div>
 
-      {/* PRODUCTIVITY */}
-      <div className="bg-[#1e293b] rounded-2xl p-5 shadow-lg flex flex-col h-full">
-        <h2 className="text-lg font-semibold mb-4">📊 Productivity</h2>
-        <div className="flex-1">
+      {/* STATS */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+
+        <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+          <p className="text-slate-500 text-sm">Total Tasks</p>
+          <h2 className="text-3xl font-bold text-slate-900 mt-2">
+            {tasks.length}
+          </h2>
+        </div>
+
+        <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+          <p className="text-slate-500 text-sm">Completed</p>
+          <h2 className="text-3xl font-bold text-green-600 mt-2">
+            {tasks.filter((t) => t.isCompleted).length}
+          </h2>
+        </div>
+
+        <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+          <p className="text-slate-500 text-sm">Pending</p>
+          <h2 className="text-3xl font-bold text-orange-500 mt-2">
+            {tasks.filter((t) => !t.isCompleted).length}
+          </h2>
+        </div>
+
+      </div>
+
+      {/* MAIN GRID */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        {/* TASK LIST */}
+        <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
+          <h2 className="text-lg font-semibold text-slate-900 mb-4">
+            Your Tasks
+          </h2>
+
+          <TaskChecklist
+            tasks={tasks}
+            onToggle={handleToggle}
+          />
+        </div>
+
+        {/* PRODUCTIVITY */}
+        <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
+          <h2 className="text-lg font-semibold text-slate-900 mb-4">
+            Productivity
+          </h2>
+
           <ProductivityChart tasks={tasks} />
         </div>
-      </div>
 
-      {/* SMART SUGGESTIONS */}
-      <div className="bg-[#1e293b] rounded-2xl p-5 shadow-lg flex flex-col h-full">
-        <h2 className="text-lg font-semibold mb-4">🧠 Smart Suggestions</h2>
-        <div className="flex-1 overflow-y-auto">
+        {/* SMART SUGGESTIONS */}
+        <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
+          <h2 className="text-lg font-semibold text-slate-900 mb-4">
+            Smart Suggestions
+          </h2>
+
           <SmartSuggestions data={smart} />
         </div>
-      </div>
 
-      {/* BALANCED PLAN */}
-      <div className="bg-[#1e293b] rounded-2xl p-5 shadow-lg flex flex-col h-full">
-        <h2 className="text-lg font-semibold mb-4">⚖️ Balanced Plan</h2>
-        <div className="flex-1 overflow-y-auto">
+        {/* BALANCED PLAN */}
+        <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
+          <h2 className="text-lg font-semibold text-slate-900 mb-4">
+            Balanced Plan
+          </h2>
+
           <BalancedPlanComp data={balanced} />
         </div>
-      </div>
 
+      </div>
     </div>
-  </div>
-);
+  );
 }
