@@ -51,4 +51,4 @@ export interface TaskProgress {
   taskId: number;
   date: string;
   hoursWorked: number;
-}
+}  

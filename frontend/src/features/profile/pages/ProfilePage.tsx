@@ -1,9 +1,16 @@
 const ProfilePage = () => {
   return (
-    <div className="p-6 text-white bg-[#0f172a] min-h-screen">
-      <h1 className="text-2xl font-bold">Profile</h1>
-      <p>User info coming soon...</p>
-    </div>
+    <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8">
+
+<h1 className="text-3xl font-bold mb-4">
+My Profile
+</h1>
+
+<p className="text-slate-400">
+Profile management coming soon.
+</p>
+
+</div>
   );
 };
 

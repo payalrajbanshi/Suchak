@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getSmartTasks } from "../../../api/taskApi";
-
+import { CheckCircle, Clock3, Smile, Timer,} from "lucide-react";
 const TodayFocus = () => {
   const [tasks, setTasks] = useState<any[]>([]);
 
@@ -9,22 +9,52 @@ const TodayFocus = () => {
   }, []);
 
   return (
-    <div className="bg-[#1e293b] p-4 rounded-xl">
-      <h2 className="text-xl font-bold mb-4">🎯 Today's Focus</h2>
+    <div className="grid md:grid-cols-4 gap-4 mb-6">
 
-      {tasks.slice(0, 3).map((t) => (
-        <div key={t.taskId} className="mb-3 border-b border-gray-700 pb-2">
-          <p className="font-semibold">{t.title}</p>
-          <p className="text-sm text-gray-300">
-            Do today: {t.hoursToDoToday} hrs
-          </p>
+  <div className="
+    bg-slate-900
+    border
+    border-slate-800
+    rounded-3xl
+    p-5
+  ">
+    <CheckCircle
+      className="text-cyan-400 mb-3"
+      size={28}
+    />
 
-          {t.warning && (
-            <p className="text-red-400 text-sm">{t.warning}</p>
-          )}
-        </div>
-      ))}
-    </div>
+    <p className="text-slate-400">
+      Tasks Today
+    </p>
+
+    <h2 className="text-3xl font-bold">
+      {tasks.length}
+    </h2>
+  </div>
+
+  <div className="bg-slate-900 border border-slate-800 rounded-3xl p-5">
+    <Timer className="text-violet-400 mb-3" size={28}/>
+    <p>Productivity</p>
+    <h2 className="text-3xl font-bold">87%</h2>
+  </div>
+
+  <div className="bg-slate-900 border border-slate-800 rounded-3xl p-5">
+    <Smile className="text-yellow-400 mb-3" size={28}/>
+    <p>Mood Today</p>
+    <h2 className="text-3xl font-bold">
+      Happy
+    </h2>
+  </div>
+
+  <div className="bg-slate-900 border border-slate-800 rounded-3xl p-5">
+    <Clock3 className="text-green-400 mb-3" size={28}/>
+    <p>Focus Time</p>
+    <h2 className="text-3xl font-bold">
+      4.5h
+    </h2>
+  </div>
+
+</div>
   );
 };
 

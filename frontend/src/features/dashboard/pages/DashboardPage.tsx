@@ -1,139 +1,187 @@
 import { useEffect, useState } from "react";
-import { getSummary } from "../../../api/dashboardApi";
-import { getWeeklyReport } from "../../../api/dashboardApi";
+import { getSummary, getWeeklyReport } from "../../../api/dashboardApi";
 import { getBalancedPlan } from "../../../api/taskApi";
-import WeeklyChart from "../components/WeeklyChart";
 
+import DashboardHeader from "../components/DashboardHeader";
+import TopStats from "../components/TopStats";
+import WeeklyChart from "../components/WeeklyChart";
+import CalendarWidget from "../components/CalendarWidget";
+import UpcomingDeadlines from "../components/UpcomingDeadlines";
+import SuchakCoach from "../components/SuchakCoach";
+import ScheduleWidget from "../components/ScheduleWidget";
 
 const DashboardPage = () => {
   const [summary, setSummary] = useState<any>(null);
   const [plan, setPlan] = useState<any[]>([]);
   const [weeklyData, setWeeklyData] = useState<any[]>([]);
-const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
-  // useEffect(() => {
-  //   getSummary().then((res) => setSummary(res.data));
-  //   getBalancedPlan().then((res) => setPlan(res.data));
-  // }, []);
-useEffect(() => {
-  const loadData = async () => {
-    try {
-      const summaryRes = await getSummary();
-      setSummary(summaryRes.data);
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const summaryRes = await getSummary();
+        setSummary(summaryRes.data);
 
-      const planRes = await getBalancedPlan();
-      setPlan(planRes.data);
-      const weeklyRes=await getWeeklyReport();
-      setWeeklyData(weeklyRes.data);
-    } catch (err) {
-      console.error("DASHBOARD ERROR:", err);
-    }finally {
-      setLoading(false);
-    }
-  };
+        const planRes = await getBalancedPlan();
+        setPlan(planRes.data);
 
-  loadData();
-}, []);
-  if (!summary) return <p>Loading...</p>;
+        const weeklyRes = await getWeeklyReport();
+        setWeeklyData(weeklyRes.data);
+      } catch (err) {
+        console.error("Dashboard Error:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
- return (
-  <div className="min-h-screen bg-[#0f172a] text-white p-6">
+    loadData();
+  }, []);
 
-
-    <div className="flex items-center justify-between mb-8">
-      <div>
-        <h1 className="text-3xl font-bold mb-1">Dashboard</h1>
-        <p className="text-gray-400 text-sm">
-          Monitor your productivity and task insights
-        </p>
+  if (!summary) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-slate-400">
+        Loading dashboard...
       </div>
+    );
+  }
 
-      <div className="flex items-center gap-4">
-        <input
-          placeholder="Search..."
-          className="bg-[#1e293b] px-4 py-2 rounded-lg outline-none text-sm"
-        />
-        <button className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg text-sm">
-          + Add Task
-        </button>
-      </div>
-    </div>
+  return (
+    <div className="space-y-8">
 
+      {/* HEADER */}
+      <DashboardHeader />
 
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      {/* TOP STATS */}
+      <TopStats summary={summary} />
 
-      <div className="bg-[#1e293b] p-5 rounded-2xl shadow-lg">
-        <p className="text-gray-400 text-sm">Total Tasks</p>
-        <h2 className="text-2xl font-bold mt-2">
-          {summary.totalTasks}
-        </h2>
-      </div>
+      {/* WEEKLY PROGRESS + CALENDAR */}
+      <div className="grid lg:grid-cols-3 gap-6">
 
-      <div className="bg-[#1e293b] p-5 rounded-2xl shadow-lg">
-        <p className="text-gray-400 text-sm">Completed</p>
-        <h2 className="text-2xl font-bold mt-2 text-green-400">
-          {summary.completedTasks}
-        </h2>
-      </div>
+        {/* Weekly Progress */}
+        <div className="lg:col-span-2">
 
-      <div className="bg-[#1e293b] p-5 rounded-2xl shadow-lg">
-        <p className="text-gray-400 text-sm">Pending</p>
-        <h2 className="text-2xl font-bold mt-2 text-yellow-400">
-          {summary.pendingTasks}
-        </h2>
-      </div>
+          <div
+            className="
+              rounded-3xl
+              border
+              border-white/10
+              bg-slate-900/70
+              backdrop-blur-xl
+              p-6
+              h-full
+            "
+          >
+            <div className="mb-5">
+              <h2 className="text-xl font-bold">
+                Weekly Progress
+              </h2>
 
-      <div className="bg-[#1e293b] p-5 rounded-2xl shadow-lg">
-        <p className="text-gray-400 text-sm">Efficiency</p>
-        <h2 className="text-2xl font-bold mt-2 text-blue-400">
-          {Math.round(
-            (summary.completedTasks / summary.totalTasks) * 100
-          ) || 0}%
-        </h2>
-      </div>
-
-    </div>
-
-    {/* MAIN GRID */}
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-      {/* CHART SECTION */}
-      <div className="lg:col-span-2 bg-[#1e293b] p-6 rounded-2xl shadow-lg">
-        <div className="flex justify-between items-center mb-4">
-          {/* <h2 className="font-semibold text-lg">📊 Weekly Progress</h2> */}
-          {/* <span className="text-xs text-gray-400">Last 7 days</span> */}
-        </div>
-
-        <WeeklyChart data={weeklyData} loading={loading} />
-      </div>
-
-    
-      <div className="bg-[#1e293b] p-6 rounded-2xl shadow-lg flex flex-col">
-        <h2 className="font-semibold text-lg mb-4 text-white">
-          🔥 Smart Plan
-        </h2>
-
-        <div className="flex-1 space-y-4 overflow-y-auto">
-          {plan.map((t) => (
-            <div
-              key={t.taskId}
-              className="bg-[#0f172a] p-3 rounded-lg hover:bg-[#1e293b] transition"
-            >
-              <p className="font-semibold">{t.title}</p>
-              <p className="text-sm text-gray-400">
-                {t.hoursToday} hrs today
-              </p>
-              <p className="text-xs text-gray-500">
-                Deadline: {t.deadline.split("T")[0]}
+              <p className="text-slate-400 text-sm mt-1">
+                Your productivity over the last 7 days
               </p>
             </div>
-          ))}
+
+            <WeeklyChart
+              data={weeklyData}
+              loading={loading}
+            />
+          </div>
+
         </div>
+
+        {/* Calendar */}
+        <CalendarWidget />
+
+      </div>
+
+      {/* ACTION CENTER */}
+      <div className="grid lg:grid-cols-12 gap-6">
+
+        {/* TODAY'S FOCUS */}
+        <div className="lg:col-span-5">
+
+          <div
+            className="
+              rounded-3xl
+              border
+              border-white/10
+              bg-slate-900/70
+              backdrop-blur-xl
+              p-6
+              h-full
+            "
+          >
+            <div className="mb-5">
+              <h2 className="text-xl font-bold">
+                Today's Focus
+              </h2>
+
+              <p className="text-slate-400 text-sm mt-1">
+                AI balanced recommendations
+              </p>
+            </div>
+
+            <div className="space-y-3">
+
+              {plan.slice(0, 4).map((task) => (
+                <div
+                  key={task.taskId}
+                  className="
+                    rounded-2xl
+                    border
+                    border-white/10
+                    bg-white/[0.02]
+                    p-4
+                  "
+                >
+                  <p className="font-medium">
+                    {task.title}
+                  </p>
+
+                  <p className="text-cyan-400 text-sm mt-2">
+                    {task.hoursToday} hrs today
+                  </p>
+
+                  <p className="text-slate-400 text-xs mt-1">
+                    {task.remainingHours} hrs remaining
+                  </p>
+                </div>
+              ))}
+
+            </div>
+
+          </div>
+
+        </div>
+
+        {/* UPCOMING DEADLINES */}
+        <div className="lg:col-span-4">
+          <UpcomingDeadlines plan={plan} />
+        </div>
+
+        {/* AI COACH */}
+        <div className="lg:col-span-3">
+          <SuchakCoach />
+        </div>
+
+      </div>
+
+      {/* SCHEDULE */}
+      <div
+        className="
+          rounded-3xl
+          border
+          border-white/10
+          bg-slate-900/70
+          backdrop-blur-xl
+          p-6
+        "
+      >
+        <ScheduleWidget />
       </div>
 
     </div>
-  </div>
-);
+  );
 };
 
 export default DashboardPage;

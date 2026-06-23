@@ -2,19 +2,24 @@ import type { BalancedPlan } from "../types/taskTypes";
 
 export default function BalancedPlanComp({ data }: any) {
   return (
-    <div className="p-4 bg-green-100 rounded text-black">
-      <h2 className="font-bold mb-2 text-black">⚖️ Balanced Plan</h2>
-
-      <p className="text-sm mb-3">
-        This plan distributes your workload evenly across the remaining time.
-      </p>
-
+    <div className="space-y-3">
       {data.map((p: any) => (
-        <div key={p.taskId} className="border-b py-2">
-          <p className="font-semibold">{p.title}</p>
-          <p className="text-sm">
-            Today: <b>{p.hoursToday} hrs</b> | Remaining:{" "}
-            <b>{p.remainingHours} hrs</b>
+        <div
+          key={p.taskId}
+          className="
+            p-3
+            rounded-xl
+            border border-slate-200
+            hover:bg-slate-50
+            transition
+          "
+        >
+          <p className="font-medium text-slate-900">
+            {p.title}
+          </p>
+
+          <p className="text-sm text-slate-600">
+            Today: {p.hoursToday}h • Remaining: {p.remainingHours}h
           </p>
         </div>
       ))}
