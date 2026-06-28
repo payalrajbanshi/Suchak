@@ -53,11 +53,15 @@ const Sidebar = () => {
           <CalendarDays size={20} />
           <span>Planner</span>
         </NavLink>
+        <NavLink to="/checklists" className={navClass}>
+        <CheckSquare size={20}/>
+        <span>Checklists</span>
 
-        <NavLink to="/suggestions" className={navClass}>
+        </NavLink>
+        {/* <NavLink to="/suggestions" className={navClass}>
           <Lightbulb size={20} />
           <span>Smart Suggestions</span>
-        </NavLink>
+        </NavLink> */}
 
         <NavLink to="/reports" className={navClass}>
           <BarChart3 size={20} />

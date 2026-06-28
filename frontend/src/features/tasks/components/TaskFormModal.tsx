@@ -25,6 +25,10 @@ export default function TaskFormModal({ onCreate }: Props) {
       alert("Title is required");
       return;
     }
+    if(!form.deadline){
+      alert("Please select a deadline");
+      return;
+    }
 
     await onCreate(form);
 
