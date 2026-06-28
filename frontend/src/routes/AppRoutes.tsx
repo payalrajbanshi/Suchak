@@ -17,7 +17,7 @@ import PlannerSettings from "../features/planner/pages/PlannerSettings";
 import ChecklistPage from "../features/checklist/pages/ChecklistPage";
 import ChecklistDetails from "../features/checklist/pages/ChecklistDetails";
 import ReportsPage from "../features/reports/pages/ReportsPage";
-
+import SettingsPage from "../features/settings/pages/SettingsPage";
 const AppRoutes = () => {
   return (
     <Routes>
@@ -82,6 +82,7 @@ const AppRoutes = () => {
   }
 />
 <Route path="/reports" element={ <ProtectedRoute> <ReportsPage/> </ProtectedRoute>}/>
+<Route path="/settings" element={<ProtectedRoute><SettingsPage/></ProtectedRoute>}/>
       </Route>
 
       
