@@ -1,7 +1,9 @@
 import { Heart } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
+  id: string;
   title: string;
   description: string;
   emoji: string;
@@ -11,6 +13,7 @@ interface Props {
 }
 
 const PlannerCard = ({
+  id,
   title,
   description,
   emoji,
@@ -19,6 +22,7 @@ const PlannerCard = ({
   updatedAt = "Today",
 }: Props) => {
   const [favorite, setFavorite] = useState(false);
+  const navigate=useNavigate();
 
   return (
     <div
@@ -58,10 +62,12 @@ const PlannerCard = ({
         {entries} entries • Updated {updatedAt}
       </div>
 
-      {/* Button */}
-      <button className="mt-5 bg-white/20 px-4 py-2 rounded-xl hover:bg-white/30">
-        Open Planner
-      </button>
+    <button
+  onClick={() => navigate(`/planner/${id}`)}
+  className="mt-5 bg-white/20 px-4 py-2 rounded-xl hover:bg-white/30"
+>
+  Open Planner
+</button>
     </div>
   );
 };

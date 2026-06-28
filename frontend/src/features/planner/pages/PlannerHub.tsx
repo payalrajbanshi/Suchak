@@ -14,6 +14,7 @@ const PlannerHub = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
 
         <PlannerCard
+        id="daily"
           title="Daily Planner"
           description="Plan your entire day"
           emoji="🌸"
@@ -23,6 +24,7 @@ const PlannerHub = () => {
         />
 
         <PlannerCard
+        id="mood"
           title="Mood Planner"
           description="Track your emotions"
           emoji="😊"
@@ -32,6 +34,7 @@ const PlannerHub = () => {
         />
 
         <PlannerCard
+        id="habit"
           title="Habit Planner"
           description="Build strong habits"
           emoji="🔥"
@@ -39,6 +42,46 @@ const PlannerHub = () => {
           entries={30}
           updatedAt="2 days ago"
         />
+
+        <PlannerCard
+  id="selfcare"
+  title="Self Care Planner"
+  description="Take care of yourself"
+  emoji="💚"
+  color="bg-emerald-500"
+  entries={18}
+  updatedAt="Today"
+/>
+
+<PlannerCard
+  id="gratitude"
+  title="Gratitude Planner"
+  description="Reflect on positivity"
+  emoji="🙏"
+  color="bg-yellow-500"
+  entries={20}
+  updatedAt="Today"
+/>
+
+<PlannerCard
+  id="lifereset"
+  title="Life Reset Planner"
+  description="Reset and rebuild"
+  emoji="✨"
+  color="bg-violet-500"
+  entries={6}
+  updatedAt="This Week"
+/>
+
+<PlannerCard
+  id="settings"
+  title="Planner Settings"
+  description="Customize aesthetics"
+  emoji="🎨"
+  color="bg-slate-700"
+  entries={0}
+  updatedAt="Now"
+/>
 
       </div>
     </div>
