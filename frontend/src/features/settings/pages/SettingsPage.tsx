@@ -1,48 +1,68 @@
-import ProfileSection from "../components/ProfileSection";
-import AppearanceSection from "../components/AppearanceSection";
-import NotificationSection from "../components/NotificationSection";
-import SecuritySection from "../components/SecuritySection";
-import AboutSection from "../components/AboutSection";
+import { useState } from "react";
+
+import SettingsHeader from "../components/SettingsHeader";
+import SettingsTabs from "../components/SettingsTabs";
+
+import ProfileTab from "../components/ProfileTab";
+import AppearanceTab from "../components/AppearanceTab";
+import NotificationTab from "../components/NotificationTab";
+import SecurityTab from "../components/SecuritySection";
+import PreferenceTab from "../components/PreferenceTab";
+import About from "../components/About";
+
+import SaveButton from "../components/SaveButton";
 
 export default function SettingsPage() {
-
-  const hour = new Date().getHours();
-
-  const greeting =
-    hour < 12
-      ? "Good Morning ☀️"
-      : hour < 18
-      ? "Good Afternoon 🌤️"
-      : "Good Evening 🌙";
+  const [activeTab, setActiveTab] = useState("profile");
 
   return (
-    <div className="min-h-screen bg-[#FAF6FC]">
+    <div className="min-h-screen bg-slate-100">
 
-      <div className="max-w-5xl mx-auto px-10 py-12">
+      <div className="max-w-6xl mx-auto py-10 px-6">
 
-        <div className="mb-12">
+        {/* Main Container */}
+        <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
 
-          <h1 className="text-5xl font-bold">
-            {greeting}
-          </h1>
+          {/* Blue Header */}
+          <SettingsHeader />
 
-          <p className="text-gray-500 mt-3 text-lg">
-            Manage your account and preferences.
-          </p>
+          {/* Tabs */}
+          <SettingsTabs
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+          />
 
-        </div>
+          {/* Content */}
+          <div className="p-10">
 
-        <div className="space-y-8">
+            {activeTab === "profile" && (
+              <ProfileTab />
+            )}
 
-          <ProfileSection />
+            {activeTab === "appearance" && (
+              <AppearanceTab />
+            )}
 
-          <AppearanceSection />
+            {activeTab === "notifications" && (
+              <NotificationTab />
+            )}
 
-          <NotificationSection />
+            {activeTab === "security" && (
+              <SecurityTab />
+            )}
 
-          <SecuritySection />
+            {activeTab === "preferences" && (
+              <PreferenceTab />
+            )}
 
-          <AboutSection />
+            {activeTab === "about" && (
+              <About />
+            )}
+
+          </div>
+
+          {/* Save Button */}
+          <SaveButton />
 
         </div>
 
